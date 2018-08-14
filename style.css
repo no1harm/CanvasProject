@@ -13,3 +13,8 @@ body {margin: 0}
     background: hotpink;
     position: absolute;
 }
+
+#canvas {
+    background: lightcoral;
+    display: block;
+}
