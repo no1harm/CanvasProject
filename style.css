@@ -1,0 +1,15 @@
+body {margin: 0}
+
+#canvasDiv {
+    height: 100vh;
+    background: darkcyan;
+    position: relative;
+}
+
+.newDiv {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: hotpink;
+    position: absolute;
+}
