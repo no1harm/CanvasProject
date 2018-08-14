@@ -56,14 +56,17 @@ var painting2 = false
 var canvas = document.getElementById('canvas')
 var ctx = canvas.getContext('2d')
 
+// 确定用户点击的此刻坐标
 var lastPoint = {x: undefined, y: undefined}
 
+// 画圆
 function drawCir(x,y,radius) {
     ctx.beginPath()
     ctx.arc(x,y,radius,0,360)
     ctx.fill()
 }
 
+// 画线
 function drawLine (x1,y1,x2,y2,) {
     ctx.beginPath()
     ctx.strokeStyle = "yellow"
@@ -78,6 +81,7 @@ canvas.onmousedown = function(keyWord) {
     painting2 = true;
     var x = keyWord.clientX;
     var y = keyWord.clientY;
+    // 确定此刻用户所点击的坐标，以配合下一个点的坐标
     lastPoint = {x:x,y:y}
     drawCir(x,y,2)
 }
