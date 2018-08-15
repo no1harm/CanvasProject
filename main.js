@@ -52,50 +52,102 @@ canvasDiv.onmouseup = function(keyWord){
 
 // // stroke 描边 fill 填充
 
-var painting2 = false
 var canvas = document.getElementById('canvas')
 var ctx = canvas.getContext('2d')
 
-// 确定用户点击的此刻坐标
-var lastPoint = {x: undefined, y: undefined}
+var using = false
 
-// 画圆
-function drawCir(x,y,radius) {
-    ctx.beginPath()
-    ctx.arc(x,y,radius,0,360)
-    ctx.fill()
+//设置canvas尺寸
+setCanvasSize(canvas)
+
+// 监听用户动作
+listenToMouse(canvas,ctx)
+
+//启用橡皮擦/画笔
+var eraserEnabled = false
+eraser.onclick = function() {
+    eraserEnabled = true
+    action.className = "action x"
+}
+brush.onclick = function() {
+    eraserEnabled = false
+    action.className = "action"
 }
 
-// 画线
-function drawLine (x1,y1,x2,y2,) {
-    ctx.beginPath()
-    ctx.strokeStyle = "yellow"
-    ctx.moveTo(x1,y1)
-    ctx.lineWidth = 2
-    ctx.lineTo(x2,y2)
-    ctx.stroke()
-    ctx.closePath()
-}
+/***********************工具函数***************** */
 
-canvas.onmousedown = function(keyWord) {
-    painting2 = true;
-    var x = keyWord.clientX;
-    var y = keyWord.clientY;
-    // 确定此刻用户所点击的坐标，以配合下一个点的坐标
-    lastPoint = {x:x,y:y}
-    drawCir(x,y,2)
-}
-canvas.onmousemove = function(keyWord) {
-    if (painting2) {
-        var x = keyWord.clientX;
-        var y = keyWord.clientY;
-        var newPoint = {x:x,y:y}
-        drawCir(x,y,2)
-        drawLine(lastPoint.x,lastPoint.y,newPoint.x,newPoint.y)
-        //这句话很重要
-        lastPoint = newPoint
+function setCanvasSize(canvas) {
+    function pageSize(){
+        // 设置canvas的宽高为全屏
+        var pageWidth = document.documentElement.clientWidth
+        var pageHeight = document.documentElement.clientHeight
+        canvas.width = pageWidth
+        canvas.height = pageHeight
+    }
+    
+    pageSize()
+    
+    // 当用户拉伸窗口时，改变canvas的宽高
+    window.onresize = function() {
+        pageSize()
     }
 }
-canvas.onmouseup = function(keyWord) {
-    painting2 = false
+
+function listenToMouse(canvas, ctx) {
+    // 确定用户点击的此刻坐标
+    var lastPoint = { x: undefined, y: undefined }
+
+    // 画圆
+    function drawCir(x, y, radius) {
+        ctx.beginPath()
+        ctx.arc(x, y, radius, 0, 360)
+        ctx.fill()
+    }
+
+    // 画线
+    function drawLine(x1, y1, x2, y2, ) {
+        ctx.beginPath()
+        ctx.strokeStyle = "yellow"
+        ctx.moveTo(x1, y1)
+        ctx.lineWidth = 2
+        ctx.lineTo(x2, y2)
+        ctx.stroke()
+        ctx.closePath()
+    }
+
+    canvas.onmousedown = function (keyWord) {
+        var x = keyWord.clientX;
+        var y = keyWord.clientY;
+        if (eraserEnabled) {
+            using = true
+            ctx.clearRect(x, y, 10, 10)
+        } else {
+            // 确定此刻用户所点击的坐标，以配合下一个点的坐标
+            using = true;
+            lastPoint = { x: x, y: y }
+            drawCir(x, y, 2)
+        }
+    }
+    canvas.onmousemove = function (keyWord) {
+
+        var x = keyWord.clientX;
+        var y = keyWord.clientY;
+
+        if (eraserEnabled) {
+            if (using) {
+                ctx.clearRect(x, y, 10, 10)
+            }
+        } else {
+            if (using) {
+                var newPoint = { x: x, y: y }
+                drawCir(x, y, 2)
+                drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
+                //这句话很重要
+                lastPoint = newPoint
+            }
+        }
+    }
+    canvas.onmouseup = function (keyWord) {
+        using = false
+    }
 }
