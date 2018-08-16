@@ -76,6 +76,24 @@ eraser.onclick = function() {
     pen.classList.remove('active')
     eraser.classList.add('active')
 }
+red.onclick = function(){
+    ctx.strokeStyle = "red"
+    red.classList.add("active")
+    yellow.classList.remove("active")
+    blue.classList.remove("active")
+}
+yellow.onclick = function(){
+    ctx.strokeStyle = "yellow"
+    yellow.classList.add("active")
+    red.classList.remove("active")
+    blue.classList.remove("active")
+}
+blue.onclick = function(){
+    ctx.strokeStyle = "blue"
+    blue.classList.add("active")
+    yellow.classList.remove("active")
+    red.classList.remove("active")
+}
 
 /***********************工具函数***************** */
 
@@ -110,7 +128,6 @@ function listenToUser(canvas, ctx) {
     // 画线
     function drawLine(x1, y1, x2, y2, ) {
         ctx.beginPath()
-        ctx.strokeStyle = "yellow"
         ctx.moveTo(x1, y1)
         ctx.lineWidth = 2
         ctx.lineTo(x2, y2)
