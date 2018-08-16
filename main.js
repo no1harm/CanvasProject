@@ -1,4 +1,4 @@
-
+/** 
 var canvasDiv = document.getElementById('canvasDiv')
 
 var painting = false
@@ -29,7 +29,7 @@ canvasDiv.onmousemove = function(keyWord) {
 canvasDiv.onmouseup = function(keyWord){
     painting = false
 }
-
+*/
 //canvas
 
 
@@ -61,7 +61,7 @@ var using = false
 setCanvasSize(canvas)
 
 // 监听用户动作
-listenToMouse(canvas,ctx)
+listenToUser(canvas,ctx)
 
 //启用橡皮擦/画笔
 var eraserEnabled = false
@@ -93,7 +93,7 @@ function setCanvasSize(canvas) {
     }
 }
 
-function listenToMouse(canvas, ctx) {
+function listenToUser(canvas, ctx) {
     // 确定用户点击的此刻坐标
     var lastPoint = { x: undefined, y: undefined }
 
@@ -115,39 +115,81 @@ function listenToMouse(canvas, ctx) {
         ctx.closePath()
     }
 
-    canvas.onmousedown = function (keyWord) {
-        var x = keyWord.clientX;
-        var y = keyWord.clientY;
-        if (eraserEnabled) {
-            using = true
-            ctx.clearRect(x, y, 10, 10)
-        } else {
-            // 确定此刻用户所点击的坐标，以配合下一个点的坐标
-            using = true;
-            lastPoint = { x: x, y: y }
-            drawCir(x, y, 2)
-        }
-    }
-    canvas.onmousemove = function (keyWord) {
-
-        var x = keyWord.clientX;
-        var y = keyWord.clientY;
-
-        if (eraserEnabled) {
-            if (using) {
+    // 特性检测
+    if (document.body.ontouchstart !== undefined){
+        // 如果设备支持触屏
+        canvas.ontouchstart = function(keyWord) {
+            var x = keyWord.touches[0].clientX;
+            var y = keyWord.touches[0].clientY;
+            console.log(x,y);
+            if (eraserEnabled) {
+                using = true
                 ctx.clearRect(x, y, 10, 10)
-            }
-        } else {
-            if (using) {
-                var newPoint = { x: x, y: y }
+            } else {
+                // 确定此刻用户所点击的坐标，以配合下一个点的坐标
+                using = true;
+                lastPoint = { x: x, y: y }
                 drawCir(x, y, 2)
-                drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
-                //这句话很重要
-                lastPoint = newPoint
             }
         }
-    }
-    canvas.onmouseup = function (keyWord) {
-        using = false
+        canvas.ontouchmove = function(keyWord) {
+            
+            var x = keyWord.touches[0].clientX;
+            var y = keyWord.touches[0].clientY;
+    
+            if (eraserEnabled) {
+                if (using) {
+                    ctx.clearRect(x, y, 10, 10)
+                }
+            } else {
+                if (using) {
+                    var newPoint = { x: x, y: y }
+                    drawCir(x, y, 2)
+                    drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
+                    //这句话很重要
+                    lastPoint = newPoint
+                }
+            }
+        }
+        canvas.ontouchend = function(keyWord) {
+            using = false
+        }
+    } else {
+        // 如果设备不支持触屏
+        canvas.onmousedown = function (keyWord) {
+            var x = keyWord.clientX;
+            var y = keyWord.clientY;
+            if (eraserEnabled) {
+                using = true
+                ctx.clearRect(x, y, 10, 10)
+            } else {
+                // 确定此刻用户所点击的坐标，以配合下一个点的坐标
+                using = true;
+                lastPoint = { x: x, y: y }
+                drawCir(x, y, 2)
+            }
+        }
+        canvas.onmousemove = function (keyWord) {
+    
+            var x = keyWord.clientX;
+            var y = keyWord.clientY;
+    
+            if (eraserEnabled) {
+                if (using) {
+                    ctx.clearRect(x, y, 10, 10)
+                }
+            } else {
+                if (using) {
+                    var newPoint = { x: x, y: y }
+                    drawCir(x, y, 2)
+                    drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
+                    //这句话很重要
+                    lastPoint = newPoint
+                }
+            }
+        }
+        canvas.onmouseup = function (keyWord) {
+            using = false
+        }
     }
 }
