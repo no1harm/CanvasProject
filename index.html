@@ -10,13 +10,23 @@
 <body>
     <canvas id="canvas" width="300" height="300"></canvas>
     <div id="action" class="action">
-        <button id="eraser">橡皮檫</button>
-        <button id="brush">画笔</button>
+        <svg id="pen" class="icon active">
+            <use xlink:href="#icon-jyall_pen"></use>
+        </svg>
+        <svg  id="eraser" class="icon">
+            <use xlink:href="#icon-eraser"></use>
+        </svg>
     </div> 
+    <ol class="pickColor">
+        <li></li>
+        <li></li>
+        <li></li>
+    </ol>
     <!--
-    <hr>
-    <div id="canvasDiv"></div>
+        <hr>
+        <div id="canvasDiv"></div>
     -->
     <script src="main.js"></script>
+    <script src="//at.alicdn.com/t/font_796648_2w5zzkxcrey.js"></script>
 </body>
 </html>

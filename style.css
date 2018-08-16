@@ -1,5 +1,6 @@
 body {margin: 0}
-
+ul,ol {list-style: none}
+*{margin: 0;padding: 0;}
 #canvasDiv {
     height: 100vh;
     background: darkcyan;
@@ -15,20 +16,45 @@ body {margin: 0}
 }
 
 #canvas {
-    background: lightcoral;
+    background: white;
     display: block;
 }
 .action {
     position: fixed;
-    bottom: 0;
-    left: 0;
+    top: 10px;
+    left: 10px;
+    padding: 20px;
 }
-.action #brush {
-    display: none;
+.action svg {
+    width: 1.5em;
+    height: 1.5em;
+    /* 效果过渡 */
+    transition: all 0.3s;
+    margin: 0 10px;
 }
-.action.x #brush {
-    display: inline-block;
+.action svg.active {
+    fill: brown;
+    transform: scale(1.2);
 }
-.action.x #eraser {
-    display: none;
+
+
+/* iconfont */
+.icon {
+    width: 1em; height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+}
+
+.pickColor {
+    /* border: 1px solid red; */
+    position: fixed;
+    top: 66px;
+    left: 40px;
+}
+.pickColor li {
+    margin: 10px 0;
+    width: 20px;
+    height: 20px;
+    border: 1px solid red;
 }

@@ -65,13 +65,16 @@ listenToUser(canvas,ctx)
 
 //启用橡皮擦/画笔
 var eraserEnabled = false
+
+pen.onclick = function() {
+    eraserEnabled = false 
+    pen.classList.add('active')
+    eraser.classList.remove('active')
+}
 eraser.onclick = function() {
     eraserEnabled = true
-    action.className = "action x"
-}
-brush.onclick = function() {
-    eraserEnabled = false
-    action.className = "action"
+    pen.classList.remove('active')
+    eraser.classList.add('active')
 }
 
 /***********************工具函数***************** */
@@ -119,9 +122,10 @@ function listenToUser(canvas, ctx) {
     if (document.body.ontouchstart !== undefined){
         // 如果设备支持触屏
         canvas.ontouchstart = function(keyWord) {
+            
             var x = keyWord.touches[0].clientX;
             var y = keyWord.touches[0].clientY;
-            console.log(x,y);
+            
             if (eraserEnabled) {
                 using = true
                 ctx.clearRect(x, y, 10, 10)
@@ -129,7 +133,6 @@ function listenToUser(canvas, ctx) {
                 // 确定此刻用户所点击的坐标，以配合下一个点的坐标
                 using = true;
                 lastPoint = { x: x, y: y }
-                drawCir(x, y, 2)
             }
         }
         canvas.ontouchmove = function(keyWord) {
@@ -144,7 +147,6 @@ function listenToUser(canvas, ctx) {
             } else {
                 if (using) {
                     var newPoint = { x: x, y: y }
-                    drawCir(x, y, 2)
                     drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
                     //这句话很重要
                     lastPoint = newPoint
@@ -166,7 +168,6 @@ function listenToUser(canvas, ctx) {
                 // 确定此刻用户所点击的坐标，以配合下一个点的坐标
                 using = true;
                 lastPoint = { x: x, y: y }
-                drawCir(x, y, 2)
             }
         }
         canvas.onmousemove = function (keyWord) {
@@ -181,7 +182,6 @@ function listenToUser(canvas, ctx) {
             } else {
                 if (using) {
                     var newPoint = { x: x, y: y }
-                    drawCir(x, y, 2)
                     drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
                     //这句话很重要
                     lastPoint = newPoint
