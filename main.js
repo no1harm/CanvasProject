@@ -54,6 +54,7 @@ canvasDiv.onmouseup = function(keyWord){
 
 var canvas = document.getElementById('canvas')
 var ctx = canvas.getContext('2d')
+lineWidth = 5
 
 var using = false
 
@@ -76,23 +77,60 @@ eraser.onclick = function() {
     pen.classList.remove('active')
     eraser.classList.add('active')
 }
-red.onclick = function(){
+// 清空画板
+clear.onclick = function() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+//保存画板
+download.onclick = function() {
+    var url = canvas.toDataURL("img/png")
+    var a = document.createElement("a")
+    document.body.appendChild(a)
+    a.href = url
+    a.download = 'My images'
+    a.target = "_blank"
+    a.click()
+}
+
+function resetTargetClass (keyWord) {
+    var parentNode = keyWord.target.parentNode
+}
+black.onclick = function(keyWord){
+    ctx.strokeStyle = "black"
+    // resetTargetClass(keyWord)
+    black.classList.add("active")
+    red.classList.remove("active")
+    yellow.classList.remove("active")
+    blue.classList.remove("active")
+}
+red.onclick = function(keyWord){
     ctx.strokeStyle = "red"
     red.classList.add("active")
     yellow.classList.remove("active")
+    black.classList.remove("active")
     blue.classList.remove("active")
 }
-yellow.onclick = function(){
+yellow.onclick = function(keyWord){
     ctx.strokeStyle = "yellow"
     yellow.classList.add("active")
     red.classList.remove("active")
+    black.classList.remove("active")
     blue.classList.remove("active")
 }
-blue.onclick = function(){
+blue.onclick = function(keyWord){
     ctx.strokeStyle = "blue"
     blue.classList.add("active")
     yellow.classList.remove("active")
+    black.classList.remove("active")
     red.classList.remove("active")
+}
+
+thin.onclick = function() {
+    lineWidth = 5
+}
+thick.onclick = function() {
+    lineWidth = 10
 }
 
 /***********************工具函数***************** */
@@ -129,7 +167,7 @@ function listenToUser(canvas, ctx) {
     function drawLine(x1, y1, x2, y2, ) {
         ctx.beginPath()
         ctx.moveTo(x1, y1)
-        ctx.lineWidth = 2
+        ctx.lineWidth = lineWidth
         ctx.lineTo(x2, y2)
         ctx.stroke()
         ctx.closePath()
